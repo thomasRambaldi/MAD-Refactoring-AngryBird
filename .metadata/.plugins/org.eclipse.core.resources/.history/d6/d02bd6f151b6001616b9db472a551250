@@ -1,6 +1,0 @@
-package refactoring.game;
-
-public class Game {
-	
-	List<Integer> levels;
-}

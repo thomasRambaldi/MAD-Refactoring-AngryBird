@@ -1,9 +1,0 @@
-package refactoring.level;
-
-import java.util.List;
-
-public class Level {
-
-	private String difficulty;
-	private List birds;
-}

@@ -1,5 +1,0 @@
-import javafx.stage.Window;
-
-public class WindowGame extends dialogWindow{
-
-}

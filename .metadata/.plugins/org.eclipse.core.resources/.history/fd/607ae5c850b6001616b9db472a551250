@@ -1,6 +1,0 @@
-package refactoring.objects;
-
-public class ConcretObject extends Object{
-
-	
-}
