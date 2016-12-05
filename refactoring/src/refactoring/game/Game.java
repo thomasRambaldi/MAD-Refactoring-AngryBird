@@ -2,8 +2,6 @@ package refactoring.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,12 +21,16 @@ import refactoring.objects.Pig;
 import refactoring.point.Point;
 
 
-
 public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
 
 	private Level[] levels;
-	boolean selecting = false;
+	private int currentLevel;
+	private int currentBird;
+	private int currentPig;
+	private  boolean selecting;
+
+	private int initBirdX, initBirdY;
 
 	private int mouseX, mouseY, score;
 	private boolean gameOver;
@@ -39,26 +41,40 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		init();
+		new Thread(this).start();
 	}
 
 	public void init() throws IOException{
+
+		currentLevel = 0;
+		currentBird = 0;
+		currentPig = 0;
+		selecting = true;
+		initBirdX = (int) (windowWidth/6 - 30) ;
+		initBirdY = (int) (windowHeight/1.3 - 70) ;
+
 		Level[] levels = new Level[2];
 
-		List<Bird> listBirds = new ArrayList<>();
-		
-		Bird red = new Bird(new Point(windowWidth/6 - 30, windowHeight/1.3 - 70), 40, 40, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5));
-		Bird chuck = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), 40, 40, ImageIO.read(new File("./res/chuck.png")), true, 0, new Point(5, 5));
+		//Liste d'oiseaux
+		List<Bird> listBirds = new ArrayList<>(); 
+		Bird red = new Bird(new Point(initBirdX, initBirdY), 40, 40, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5), 0.1);
+		Bird chuck = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), 40, 40, ImageIO.read(new File("./res/chuck.png")), true, 0, new Point(5, 5), 0.1);
 		listBirds.add(red);
 		listBirds.add(chuck);
 
-	
+		//Liste de Pigs
 		List<Pig> listPigs = new ArrayList<>();
+		Pig littlePig = new Pig(new Point( (Math.random() * ( 1300 - 500)), windowHeight - 150), 40, 40,  ImageIO.read(new File("./res/pig_1.png")), false, 1, 1, 0.0);
+		Pig MediumPig = new Pig(new Point( (Math.random() * ( 1300 - 500)), windowHeight - 150), 40, 40,  ImageIO.read(new File("./res/armor_pig.png")), false, 4, 4, 0.0);
+		listPigs.add(littlePig);
+		listPigs.add(MediumPig);
+
+		//Liste de Objects du level
 		List<ObjectOfLevel> listObjects = new ArrayList<>();
-		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), 60, 150, ImageIO.read(new File("./res/lance-pierre.png")), false, 0);
+		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), 60, 150, ImageIO.read(new File("./res/lance-pierre.png")), false, 0, 0);
 		listObjects.add(lancePierre);
-		
-		
-		
+
+
 		levels[0] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/nature.jpg")), 1);
 		levels[1] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
 
@@ -67,26 +83,36 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		gameOver = false;
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		new Thread(this).start();
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
 
 		// Draw the background image.
-		Level level = levels[0];
+		Level level = levels[currentLevel];
 		level.paint(g);
-		
-		
-		List<Bird> birds = levels[0].getListBirds();
+
+
+		List<Bird> birds = levels[currentLevel].getListBirds();
 		for(Bird b : birds)
 			b.paint(g);
-		//		g.drawImage(b.getImage(), (int) b.getPosition().getX() - 20, (int) b.getPosition().getY() - 20,40,40, this);
-		
-		
+
+		List<Pig> pigs= levels[currentLevel].getListPigs();
+		for(Pig p : pigs)
+			p.paint(g);
+
+
 		List<ObjectOfLevel> objectsOfLevel = levels[0].getListObjects();
 		for(ObjectOfLevel object : objectsOfLevel)
 			object.paint(g);
+
+		if(selecting){
+			Bird b = levels[currentLevel].getListBirds().get(currentBird);
+			b.setPosition(new Point(mouseX-b.getWidth()/2, mouseY-b.getWidth()/2));
+			g.setColor(Color.RED);
+			g.drawLine( (int)initBirdX + b.getWidth()/2, 
+					(int)initBirdY + b.getWidth()/2, mouseX, mouseY);
+		}
 	}
 
 	public void update(Graphics g){
@@ -98,35 +124,67 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		while(true) {
 			// un pas de simulation toutes les 10ms
 			try { Thread.currentThread().sleep(10); } catch(InterruptedException e) { }
-			//			System.out.println("hello");
-			//
-			//            if(!gameOver && !selecting) {
-			//
-			//                // moteur physique
-			//                birdX += velocityX;
-			//                birdY += velocityY;
-			//                velocityY += gravity;
-			//
-			//                // conditions de victoire
-			//                if(distance(birdX, birdY, pigX, pigY) < 35) {
-			//                    stop();
-			//                    message = "Gagn� : cliquez pour recommencer.";
-			//                    score++;
-			//                } else if(birdX < 20 || birdX > 780 || birdY < 0 || birdY > 480) {
-			//                    stop();
-			//                    message = "Perdu : cliquez pour recommencer.";
-			//                }
-			//
-			// redessine
-			//			                repaint();
-			//            }
+
+
+			if(!selecting && !gameOver) {
+				Bird b = levels[currentLevel].getListBirds().get(currentBird);
+				b.updatePosition();				
+
+				List<Pig> pigs= levels[currentLevel].getListPigs();
+				System.out.println(currentBird);
+				for(int i = 0 ; i < pigs.size() ; i++){
+					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) < 35  ){
+
+						selecting = true;
+
+						//Le cochons perd de la vie on change d'image
+						if( pigs.get(i).getLife() > 1){
+							pigs.get(i).looseLife();
+							pigs.get(i).changePigs();
+						}
+						else // le cochons disparait car plus de vie
+							pigs.remove(pigs.get(i));
+
+						// Si plus de birds disponible on stop
+						if(currentBird==levels[currentLevel].getListBirds().size()-1)
+							stop();
+						else // sinon on passe au bird suivant
+							currentBird++;
+					}
+				}
+
+				if(b.getPosition().getX() > initBirdX)
+					b.setGravity(0.15);
+
+				if(b.getPosition().getY() >  windowHeight - 150 && (b.getVelocity().getY() > 0.001) ){
+					b.getVelocity().setY(b.getVelocity().getY()*-0.8);
+				}
+
+				if(b.getPosition().getY() < 0  ){
+					b.getVelocity().setY(b.getVelocity().getY()*-1);
+				}
+
+				if(b.getPosition().getX()+b.getWidth() > windowWidth)
+					b.getVelocity().setX(b.getVelocity().getX()*-1);
+
+				if(b.getPosition().getX()  < 0)
+					b.getVelocity().setX(b.getVelocity().getX()*-1);
+
+				if(pigs.isEmpty() )
+					stop();
+
+				// redessine
+				repaint();
+			}
 		}
 	}
 
+
+
 	// fin de partie
-	void stop() {
-		//		velocityX = 0;
-		//		velocityY = 0;
+	private void stop() {
+		levels[currentLevel].getListBirds().get(0).getVelocity().setX(0);
+		levels[currentLevel].getListBirds().get(0).getVelocity().setY(0);
 		gameOver = true;
 	}
 
@@ -185,15 +243,19 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(gameOver) {
-				try {
-					init();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+			try {
+				init();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if(selecting) {
-//			velocityX = (birdX - mouseX) / 20.0;
-//			velocityY = (birdY - mouseY) / 20.0;
-//			message = "L'oiseau prend sont envol";
+			Bird b = levels[currentLevel].getListBirds().get(currentBird);
+			Point init = new Point(initBirdX,initBirdY);
+			Point mouse = new Point(mouseX,mouseY);
+			Point velocity = new Point((int) ((initBirdX - mouseX) / 20.0)*Point.distance(init, mouse)/200, 
+					(int) ((initBirdY - mouseY) / 20.0)*Point.distance(init, mouse)/200);
+			b.setGravity(0);
+			b.setVelocity(velocity);
 			selecting = false;
 		}
 		repaint();		
@@ -203,7 +265,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	public void mouseClicked(MouseEvent e) {	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {	}
+	public void mousePressed(MouseEvent e) { }
 
 	@Override
 	public void mouseEntered(MouseEvent e) {	}

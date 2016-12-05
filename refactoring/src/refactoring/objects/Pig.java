@@ -15,8 +15,8 @@ public class Pig extends AbstractObject {
 		life = 1;
 	}
 
-	public Pig(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject, int life)  {
-		super(position, width , heigth, image, isGravitational, typeObject);
+	public Pig(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject, int life, double gravity)  {
+		super(position, width , heigth, image, isGravitational, typeObject, gravity);
 		this.life = life;
 	}
 
@@ -27,8 +27,8 @@ public class Pig extends AbstractObject {
 	public void setLife(int life) {
 		this.life = life;
 	} 
-	
-/*
+
+	/*
 	public void paint(Graphics g) {
 		super.paint(g);
 		switch (typeObject) {
@@ -43,21 +43,35 @@ public class Pig extends AbstractObject {
 		}
 		g.drawImage(image, 100, 100, this);
 	}
-*/
-	@Override
-	protected void paintComponent(Graphics g) {
-		System.out.println("Méthode paint");
-		super.paintComponent(g);
-		switch (typeObject) {
+	 */
+
+	public void looseLife(){
+		life --;
+	}
+
+
+	public void changePigs(){
+		switch (life) {
 		case 1:
-			image = getToolkit().getImage("./res/pig_1.png");
+			image = getToolkit().getImage("./res/pig_3.png");
 			break;
 		case 2:
 			image = getToolkit().getImage("./res/pig_2.png");
 			break;
+		case 3:
+			image = getToolkit().getImage("./res/pig_1.png");
+			break;
+		case 4:
+			image = getToolkit().getImage("./res/armor_pig.png");
+			break;
 		default:
 			break;
 		}
-		g.drawImage(image, 100, 100, this);
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.drawImage(image, (int) getPosition().getX(), (int)getPosition().getY(),  width, heigth, this);
 	}
 }

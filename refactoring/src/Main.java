@@ -18,8 +18,7 @@ public class Main  {
 
 		int w = 1300;
 		int h = 800;
-		
-		
+
 		Frame frame = new Frame("Oiseau pas content");
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {

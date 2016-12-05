@@ -15,10 +15,14 @@ public class Point {
 		this.y = y;
 	}
 
-	public double distance( Point p1, Point p2 ){
+	public static double distance( Point p1, Point p2 ){
         double dx = p1.x - p2.x;
         double dy = p1.y - p2.y;
         return Math.sqrt(dx * dx + dy * dy);
+	}
+
+	public static void move(Point p1, Point p2){
+		p1 = p2;
 	}
 	
 	public double getX() {

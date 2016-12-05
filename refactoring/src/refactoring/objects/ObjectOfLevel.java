@@ -15,8 +15,8 @@ public class ObjectOfLevel extends AbstractObject{
 		//		this.objectType = 0;
 	}
 
-	public ObjectOfLevel(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject)  {
-		super(position,width, heigth,  image, isGravitational, typeObject);
+	public ObjectOfLevel(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject, double gravity)  {
+		super(position,width, heigth,  image, isGravitational, typeObject, gravity);
 	}
 
 	/*
