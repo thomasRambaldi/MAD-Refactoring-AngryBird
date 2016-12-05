@@ -1,0 +1,18 @@
+package refactoring.objects;
+
+import refactoring.point.Point;
+
+public class Object {
+	
+	private Point position;
+	
+	public Object(){
+		position.setX(0);
+		position.setY(0);
+	}
+	
+	public Object(Point p){
+		position.setX( p.getX() );
+		position.setY( p.getY());
+	}
+}

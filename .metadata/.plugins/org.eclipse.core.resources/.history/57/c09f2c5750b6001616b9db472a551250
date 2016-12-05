@@ -1,0 +1,24 @@
+package refactoring.objects;
+
+import refactoring.point.Point;
+
+public class Birds extends Object {
+
+	private Point velocity;
+	private int birdsType;
+	
+	public Birds() {
+		super();
+		this.velocity = new Point(0, 0);
+		this.birdsType = birdsType;
+	}
+	
+	public Birds(Point velocity, int birdsType) {
+		super();
+		this.velocity = velocity;
+		this.birdsType = birdsType;
+	}
+	
+	
+	
+}

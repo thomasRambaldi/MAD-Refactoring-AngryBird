@@ -1,0 +1,25 @@
+package refactoring.game;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game {
+	
+	List<Integer> levels;
+
+	
+	public Game() {
+		System.out.println("Constructeur de la classe game");
+		super();
+		this.levels = new ArrayList<>();
+	}
+	
+	/**
+	 * @param levels
+	 */
+	public Game(List<Integer> levels) {
+		super();
+		this.levels = levels;
+	}
+		
+}

@@ -1,0 +1,68 @@
+package refactoring.objects;
+
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.JComponent;
+
+import refactoring.point.Point;
+
+public abstract class AbstractObject extends JComponent{
+	private static final long serialVersionUID = 1L;
+
+	protected Point position;
+	protected Image image;
+	protected boolean isGravitational;
+	protected Graphics g;
+	protected int typeObject;
+
+
+	public AbstractObject(){
+		position = new Point(0, 0);
+		image = null;
+		isGravitational = false;
+		typeObject = 1;
+	}
+
+	public AbstractObject(Point position, Image image, boolean isGravitational, int typeObject){
+		this.position = position;
+		this.image = image;
+		this.isGravitational = isGravitational;
+		this.typeObject = typeObject;
+	}
+
+	//public abstract void paint ( Graphics g );
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	public boolean isGravitational() {
+		return isGravitational;
+	}
+
+	public void setGravitational(boolean isGravitational) {
+		this.isGravitational = isGravitational;
+	}
+
+	public int getTypeObject() {
+		return typeObject;
+	}
+
+	public void setTypeObject(int typeObject) {
+		this.typeObject = typeObject;
+	}
+
+}

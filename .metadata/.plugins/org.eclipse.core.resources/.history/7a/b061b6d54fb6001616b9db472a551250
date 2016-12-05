@@ -1,0 +1,33 @@
+package refactoring.objects;
+
+import javafx.scene.image.Image;
+import refactoring.point.Point;
+
+public class Object {
+	
+	private Point position;
+	private Image image;
+	private boolean isGravitational;
+	
+	
+	
+	public Object(){
+		position.setX(0);
+		position.setY(0);
+		image = null;
+		isGravitational = 0;
+	}
+	
+	public Object(Point p, Image image, boolean isGravitational){
+		position.setX( p.getX() );
+		position.setY( p.getY() );
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+}

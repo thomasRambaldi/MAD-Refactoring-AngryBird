@@ -1,0 +1,15 @@
+import javafx.application.Application;
+
+public class Main extends Application{
+
+    public static void main(String[] args) {
+        Application.launch(Test.class, args);
+    }
+    
+    @Override
+    public void start(Stage primaryStage) {
+        
+        primaryStage.setVisible(true);
+    }
+    
+}

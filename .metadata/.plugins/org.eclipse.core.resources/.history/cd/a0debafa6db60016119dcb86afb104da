@@ -1,0 +1,51 @@
+package refactoring.objects;
+
+import refactoring.point.Point;
+
+public class Bird extends Object {
+
+	private Point velocity;
+	private int birdsType;
+	
+	public Bird() {
+		super();
+		this.velocity = new Point(0, 0);
+		this.birdsType = 0;
+	}
+	
+	public Bird(Point velocity, int birdsType) {
+		super();
+		this.velocity = velocity;
+		this.birdsType = birdsType;
+	}
+
+	public init(){
+		this.position = new Point( 100, 400 );
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public Point getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Point velocity) {
+		this.velocity = velocity;
+	}
+
+	public int getBirdsType() {
+		return birdsType;
+	}
+
+	public void setBirdsType(int birdsType) {
+		this.birdsType = birdsType;
+	}
+	
+	
+	
+}

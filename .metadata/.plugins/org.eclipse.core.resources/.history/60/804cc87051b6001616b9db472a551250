@@ -1,0 +1,89 @@
+package refactoring.level;
+
+import java.util.List;
+
+import javafx.scene.image.Image;
+import refactoring.objects.Bird;
+import refactoring.objects.Pig;
+
+public class Level {
+
+	private String difficulty;
+	private List<Bird> listBirds;
+	private List<Pig> listPigs;
+	private List<Object> listObjects;
+	
+	private Image background;
+	
+	private int gravity;
+
+	public Level(){
+		super();
+		this.difficulty = ;
+		this.listBirds = new Array;
+		this.listPigs = listPigs;
+		this.listObjects = listObjects;
+		this.background = background;
+		this.gravity = gravity;
+	}
+	
+	public Level(String difficulty, List listBirds, List listPigs, List listObjects, Image background, int gravity) {
+		super();
+		this.difficulty = difficulty;
+		this.listBirds = listBirds;
+		this.listPigs = listPigs;
+		this.listObjects = listObjects;
+		this.background = background;
+		this.gravity = gravity;
+	}
+
+	public String getDifficulty() {
+		return difficulty;
+	}
+
+	public void setDifficulty(String difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public List getListBirds() {
+		return listBirds;
+	}
+
+	public void setListBirds(List listBirds) {
+		this.listBirds = listBirds;
+	}
+
+	public List getListPigs() {
+		return listPigs;
+	}
+
+	public void setListPigs(List listPigs) {
+		this.listPigs = listPigs;
+	}
+
+	public List getListObjects() {
+		return listObjects;
+	}
+
+	public void setListObjects(List listObjects) {
+		this.listObjects = listObjects;
+	}
+
+	public Image getBackground() {
+		return background;
+	}
+
+	public void setBackground(Image background) {
+		this.background = background;
+	}
+
+	public int getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
+	
+	
+}

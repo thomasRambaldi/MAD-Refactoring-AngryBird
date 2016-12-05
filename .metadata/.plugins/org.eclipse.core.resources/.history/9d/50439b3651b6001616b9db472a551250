@@ -1,0 +1,15 @@
+package refactoring.level;
+
+import java.util.List;
+
+public class Level {
+
+	private String difficulty;
+	private List listBirds;
+	private List listPigs;
+	private List listObjects;
+	
+	private Image background;
+	
+	private int gravity;
+}

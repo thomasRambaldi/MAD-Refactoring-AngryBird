@@ -1,0 +1,17 @@
+package refactoring.objects;
+
+public class ConcretObject extends Object{
+	
+	private int objectType;
+
+	public ConcretObject() {
+		super();
+		this.objectType = 0;
+	}
+
+	public ConcretObject(int objectType) {
+		super();
+		this.objectType = objectType;
+	}
+	
+}

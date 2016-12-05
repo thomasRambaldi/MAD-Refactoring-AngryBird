@@ -1,0 +1,2 @@
+Level nbBirds typeBird NbPigs typePig
+1 1 1 1 1

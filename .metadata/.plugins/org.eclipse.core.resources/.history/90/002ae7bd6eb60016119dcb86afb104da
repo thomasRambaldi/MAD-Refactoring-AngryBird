@@ -1,0 +1,30 @@
+package refactoring.objects;
+
+public class Pig extends Object {
+
+	private int life;
+
+	public Pig() {
+		super();
+		life = 1;
+	}
+
+	public Pig(int life) {
+		super();
+		this.life = life;
+	}
+	
+	public void init(){
+		this.position = new Point(Math.random() * 500 + 200, 480  );
+	}
+	
+
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	} 
+	
+}

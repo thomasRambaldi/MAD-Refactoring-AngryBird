@@ -1,0 +1,8 @@
+package refactoring.game;
+
+import java.awt.Graphics;
+
+public class Draw {
+
+	private Graphics g;
+}

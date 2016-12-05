@@ -1,0 +1,7 @@
+package refactoring.objects;
+
+public class Birds extends Object {
+
+	private Point velocity;
+	
+}
