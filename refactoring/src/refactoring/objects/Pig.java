@@ -15,8 +15,8 @@ public class Pig extends AbstractObject {
 		life = 1;
 	}
 
-	public Pig(Point position, Image image, boolean isGravitational, int typeObject, int life)  {
-		super(position, image, isGravitational, typeObject);
+	public Pig(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject, int life)  {
+		super(position, width , heigth, image, isGravitational, typeObject);
 		this.life = life;
 	}
 

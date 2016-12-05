@@ -22,7 +22,7 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
         double dy = y1 - y2;
         return Math.sqrt(dx * dx + dy * dy);
     }
-
+ 
     // constructeur
     AngryBirds() {
         gravity = 0.1;

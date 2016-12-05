@@ -1,50 +1,104 @@
 package refactoring.game;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+
+import refactoring.level.Difficulties;
 import refactoring.level.Level;
+import refactoring.objects.Bird;
+import refactoring.objects.ObjectOfLevel;
+import refactoring.objects.Pig;
+import refactoring.point.Point;
 
 
-public class Game extends Panel implements MouseListener, MouseMotionListener{
+
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
 
 	private Level[] levels;
-	
+	boolean selecting = false;
+
 	private int mouseX, mouseY, score;
 	private boolean gameOver;
-	Image background;
+	private int windowWidth, windowHeight;
 
-	public Game() {
+	public Game(int windowWidth, int windowHeight) throws IOException {
 		super();
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
 		init();
-		this.levels = new Level[2] ;
 	}
 
-	public Game(Level[] levels) {
-		super();
-		init();
-		this.levels = levels;
-	}
+	public void init() throws IOException{
+		Level[] levels = new Level[2];
+
+		List<Bird> listBirds = new ArrayList<>();
+		
+		Bird red = new Bird(new Point(windowWidth/6 - 30, windowHeight/1.3 - 70), 40, 40, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5));
+		Bird chuck = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), 40, 40, ImageIO.read(new File("./res/chuck.png")), true, 0, new Point(5, 5));
+		listBirds.add(red);
+		listBirds.add(chuck);
+
 	
-	public void init(){
-		System.out.println("Constructeur de Game");
+		List<Pig> listPigs = new ArrayList<>();
+		List<ObjectOfLevel> listObjects = new ArrayList<>();
+		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), 60, 150, ImageIO.read(new File("./res/lance-pierre.png")), false, 0);
+		listObjects.add(lancePierre);
+		
+		
+		
+		levels[0] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/nature.jpg")), 1);
+		levels[1] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
+
+		this.levels=levels;
 		this.score = 0;
 		gameOver = false;
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		new Thread(this).start();
+	}
+
+	public void paint(Graphics g) {
+		super.paint(g);
+
+		// Draw the background image.
+		Level level = levels[0];
+		level.paint(g);
+		
+		
+		List<Bird> birds = levels[0].getListBirds();
+		for(Bird b : birds)
+			b.paint(g);
+		//		g.drawImage(b.getImage(), (int) b.getPosition().getX() - 20, (int) b.getPosition().getY() - 20,40,40, this);
+		
+		
+		List<ObjectOfLevel> objectsOfLevel = levels[0].getListObjects();
+		for(ObjectOfLevel object : objectsOfLevel)
+			object.paint(g);
+	}
+
+	public void update(Graphics g){
+		paint(g);
 	}
 
 	// boucle qui calcule la position de l'oiseau en vol, effectue l'affichage et teste les conditions de victoire
 	public void run() {
 		while(true) {
 			// un pas de simulation toutes les 10ms
-			try { 
-				Thread.currentThread();
-				Thread.sleep(10); 
-			} catch(InterruptedException e) { }
+			try { Thread.currentThread().sleep(10); } catch(InterruptedException e) { }
+			//			System.out.println("hello");
 			//
 			//            if(!gameOver && !selecting) {
 			//
@@ -56,7 +110,7 @@ public class Game extends Panel implements MouseListener, MouseMotionListener{
 			//                // conditions de victoire
 			//                if(distance(birdX, birdY, pigX, pigY) < 35) {
 			//                    stop();
-			//                    message = "Gagné : cliquez pour recommencer.";
+			//                    message = "Gagnï¿½ : cliquez pour recommencer.";
 			//                    score++;
 			//                } else if(birdX < 20 || birdX > 780 || birdY < 0 || birdY > 480) {
 			//                    stop();
@@ -117,41 +171,45 @@ public class Game extends Panel implements MouseListener, MouseMotionListener{
 	}
 
 	@Override
-	public void mouseDragged(java.awt.event.MouseEvent e) {
-		//		mouseMoved(e);
+	public void mouseDragged(MouseEvent e) {
+		mouseMoved(e);
 	}
 
 	@Override
-	public void mouseMoved(java.awt.event.MouseEvent e) {
-		//		mouseX = e.getX();
-		//		mouseY = e.getY();
-		//		repaint();		
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+		repaint();		
 	}
 
 	@Override
-	public void mouseReleased(java.awt.event.MouseEvent e) {
-		//		if(gameOver) {
-		//			init();
-		//		} else if(selecting) {
-		//			velocityX = (birdX - mouseX) / 20.0;
-		//			velocityY = (birdY - mouseY) / 20.0;
-		//			message = "L'oiseau prend sont envol";
-		//			selecting = false;
-		//		}
-		//		repaint();		
+	public void mouseReleased(MouseEvent e) {
+		if(gameOver) {
+				try {
+					init();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+		} else if(selecting) {
+//			velocityX = (birdX - mouseX) / 20.0;
+//			velocityY = (birdY - mouseY) / 20.0;
+//			message = "L'oiseau prend sont envol";
+			selecting = false;
+		}
+		repaint();		
 	}
 
 	@Override
-	public void mouseClicked(java.awt.event.MouseEvent e) {	}
+	public void mouseClicked(MouseEvent e) {	}
 
 	@Override
-	public void mousePressed(java.awt.event.MouseEvent e) {	}
+	public void mousePressed(MouseEvent e) {	}
 
 	@Override
-	public void mouseEntered(java.awt.event.MouseEvent e) {	}
+	public void mouseEntered(MouseEvent e) {	}
 
 	@Override
-	public void mouseExited(java.awt.event.MouseEvent e) {	}
+	public void mouseExited(MouseEvent e) {	}
 
 
 }

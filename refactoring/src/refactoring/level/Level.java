@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import refactoring.objects.Bird;
+import refactoring.objects.ObjectOfLevel;
 import refactoring.objects.Pig;
 
 public class Level extends Panel{
@@ -15,7 +16,7 @@ public class Level extends Panel{
 	private Difficulties difficulty;
 	private List<Bird> listBirds;
 	private List<Pig> listPigs;
-	private List<Object> listObjects;
+	private List<ObjectOfLevel> listObjects;
 	
 	private Image background;
 	private int gravity;
@@ -32,7 +33,7 @@ public class Level extends Panel{
 		this.gravity = 1;
 	}
 	
-	public Level(Difficulties difficulty, List<Bird> listBirds, List<Pig> listPigs, List<Object> listObjects, Image background, int gravity) {
+	public Level(Difficulties difficulty, List<Bird> listBirds, List<Pig> listPigs, List<ObjectOfLevel> listObjects, Image background, int gravity) {
 		super();
 
 		this.difficulty = difficulty;
@@ -44,16 +45,14 @@ public class Level extends Panel{
 	}
 	
 	public void init(){
-		System.out.println("Constructeur de level");
 		this.isFinish = false;
 		this.isWin = false;
 	}
 	
 	public void paint(Graphics g) {
-		System.out.println("Paint Level");
 		super.paint(g);
 //		background = getToolkit().getImage("./res/nature.jpg");
-		g.drawImage(background, 0, 0, this);
+		g.drawImage(background, 0, 0, 1300, 800, this);
 		
 	}
 	
@@ -81,17 +80,17 @@ public class Level extends Panel{
 		this.listPigs = listPigs;
 	}
 
-	public List<Object> getListObjects() {
+	public List<ObjectOfLevel> getListObjects() {
 		return listObjects;
 	}
 
-	public void setListObjects(List<Object> listObjects) {
+	public void setListObjects(List<ObjectOfLevel> listObjects) {
 		this.listObjects = listObjects;
 	}
 
-//	public Image getBackground() {
-//		return background;
-//	}
+	public Image getImageBackground() {
+		return background;
+	}
 
 	public void setBackground(Image background) {
 		this.background = background;
