@@ -21,7 +21,6 @@ public class Level extends Panel{
 	private Image background;
 	private int gravity;
 	private boolean isFinish;
-	private boolean isWin;
 	
 	public Level(){
 		super();
@@ -35,7 +34,6 @@ public class Level extends Panel{
 	
 	public Level(Difficulties difficulty, List<Bird> listBirds, List<Pig> listPigs, List<ObjectOfLevel> listObjects, Image background, int gravity) {
 		super();
-
 		this.difficulty = difficulty;
 		this.listBirds = listBirds;
 		this.listPigs = listPigs;
@@ -46,12 +44,10 @@ public class Level extends Panel{
 	
 	public void init(){
 		this.isFinish = false;
-		this.isWin = false;
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-//		background = getToolkit().getImage("./res/nature.jpg");
 		g.drawImage(background, 0, 0, 1300, 800, this);
 		
 	}
@@ -111,13 +107,4 @@ public class Level extends Panel{
 	public void setFinish(boolean isFinish) {
 		this.isFinish = isFinish;
 	}
-
-	public boolean isWin() {
-		return isWin;
-	}
-
-	public void setWin(boolean isWin) {
-		this.isWin = isWin;
-	}
-	
 }

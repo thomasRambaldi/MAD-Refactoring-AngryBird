@@ -21,10 +21,6 @@ public class Point {
         return Math.sqrt(dx * dx + dy * dy);
 	}
 
-	public static void move(Point p1, Point p2){
-		p1 = p2;
-	}
-	
 	public double getX() {
 		return x;
 	}

@@ -27,30 +27,7 @@ public class Bird extends AbstractObject {
 	public void setVelocity(Point velocity) {
 		this.velocity = velocity;
 	}
-/*
-	public void paint(Graphics g) {
-		System.out.println("M�thode paint");
-		super.paint(g);
-		switch (typeObject) {
-		case 1:
-			System.out.println("type = " + 1);
-			image = getToolkit().getImage("./res/red.png");
-			break;
-		case 2:
-			System.out.println("type = " + 2);
-			image = getToolkit().getImage("./res/chuck.png");
-			break;
-		default:
-			break;
-		}
-		g.drawImage(image, 100, 100, this);
-	}
-	
-	public void update(Graphics g){
-		System.out.println("M�thode update");
-		paint(g);
-	}
-*/
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

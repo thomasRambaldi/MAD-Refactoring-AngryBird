@@ -28,27 +28,9 @@ public class Pig extends AbstractObject {
 		this.life = life;
 	} 
 
-	/*
-	public void paint(Graphics g) {
-		super.paint(g);
-		switch (typeObject) {
-		case 1:
-			image = getToolkit().getImage("./res/pig_1.png");
-			break;
-		case 2:
-			image = getToolkit().getImage("./res/pig_2.png");
-			break;
-		default:
-			break;
-		}
-		g.drawImage(image, 100, 100, this);
-	}
-	 */
-
 	public void looseLife(){
 		life --;
 	}
-
 
 	public void changePigs(){
 		switch (life) {

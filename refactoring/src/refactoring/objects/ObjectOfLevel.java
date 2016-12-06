@@ -8,24 +8,13 @@ import refactoring.point.Point;
 public class ObjectOfLevel extends AbstractObject{
 	private static final long serialVersionUID = 1L;
 
-
-	
 	public ObjectOfLevel() {
 		super();
-		//		this.objectType = 0;
 	}
 
 	public ObjectOfLevel(Point position, int width, int heigth, Image image, boolean isGravitational, int typeObject, double gravity)  {
 		super(position,width, heigth,  image, isGravitational, typeObject, gravity);
 	}
-
-	/*
-	public void paint(Graphics g) {
-		super.paint(g);
-		image = getToolkit().getImage("./res/tuyau.png");
-		g.drawImage(image, 100, 100, this);
-	}
-	 */
 
 	@Override
 	public void paint(Graphics g) {

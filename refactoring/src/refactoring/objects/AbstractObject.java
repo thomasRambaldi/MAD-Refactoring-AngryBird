@@ -36,7 +36,6 @@ public abstract class AbstractObject extends JComponent{
 		this.heigth = heigth;
 		this.gravity = gravity;
 	}
-
 	//public abstract void paint ( Graphics g );
 
 	public Point getPosition() {
