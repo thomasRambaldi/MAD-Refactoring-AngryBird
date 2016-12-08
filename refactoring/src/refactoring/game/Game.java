@@ -216,7 +216,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			if(!selecting && !gameOver) {
 				Bird b = levels[currentLevel].getListBirds().get(currentBird);
 				b.updatePosition();				
-				System.out.println(b.getVelocity().getX()+ " - "+b.getVelocity().getY());
 				List<Pig> pigs= levels[currentLevel].getListPigs();
 				for(int i = 0 ; i < pigs.size() ; i++){
 					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) < 35  ){
@@ -319,7 +318,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			gravity=b.getGravity();
 			b.setGravity(0.0001);
 			b.setVelocity(velocity);
-			System.out.println("BEFORE : " + b.getVelocity().getX()+ " - "+b.getVelocity().getY());
 			selecting = false;
 		}
 		repaint();		
