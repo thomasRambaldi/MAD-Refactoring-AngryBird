@@ -21,13 +21,18 @@ import refactoring.objects.ObjectOfLevel;
 import refactoring.objects.Pig;
 import refactoring.point.Point;
 
-
+/*
+ * REGLER LES PROBLEEMES DE CHANGEMENT DE NIVEAU !!!!
+ * corriger les problemes de colisions avec les birds plus gros
+ */
 public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
 
-	private final int sizeImage = 40;
-	private final int SlingshotW = 60;
-	private final int SlingshotH = 150;
+	private final int SIZE_IMAGE_NORMAL = 40;
+	private final int SIZE_IMAGE_LARGE = 50;
+	private final int SIZE_IMAGE_HUGE = 60;
+	private final int SLINGSHOTW = 60;
+	private final int SLINGSHOTH = 150;
 	
 	private Level[] levels;
 	private int currentLevel;
@@ -45,46 +50,62 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		super();
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
+		this.score = 0;
+		currentLevel = 0;
+		Level[] levels = new Level[2];
+		this.levels=levels;
 		init();
 		new Thread(this).start();
 	}
 
 	public void init() throws IOException{
-
-		currentLevel = 0;
+		
 		currentBird = 0;
 		currentPig = 0;
 		selecting = true;
 		initBirdX = (int) (windowWidth/6 - 30) ;
 		initBirdY = (int) (windowHeight/1.3 - 70) ;
 
-		Level[] levels = new Level[2];
-
-		//Liste d'oiseaux
+		//Liste d'oiseaux level 0
 		List<Bird> listBirds = new ArrayList<>(); 
-		Bird red = new Bird(new Point(initBirdX, initBirdY), sizeImage, sizeImage, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5), 0.1);
-		Bird chuck = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), sizeImage, sizeImage, ImageIO.read(new File("./res/chuck.png")), true, 0, new Point(5, 5), 0.1);
+		Bird red = new Bird(new Point(initBirdX, initBirdY), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5), 0.1);
 		listBirds.add(red);
-		listBirds.add(chuck);
 
-		//Liste de Pigs
+		//Liste de Pigs level 0
 		List<Pig> listPigs = new ArrayList<>();
-		Pig littlePig = new Pig(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150), sizeImage, sizeImage,  ImageIO.read(new File("./res/pig_1.png")), false, 1, 1, 0.0);
-		Pig MediumPig = new Pig(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150), sizeImage, sizeImage,  ImageIO.read(new File("./res/armor_pig.png")), false, 4, 4, 0.0);
+		Pig littlePig = new Pig(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL,  ImageIO.read(new File("./res/pig_1.png")), false, 1, 1, 0.0);
 		listPigs.add(littlePig);
-		listPigs.add(MediumPig);
 
 		//Liste de Objects du level
 		List<ObjectOfLevel> listObjects = new ArrayList<>();
-		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), SlingshotW, SlingshotH, ImageIO.read(new File("./res/lance-pierre.png")), false, 0, 0);
+		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), SLINGSHOTW, SLINGSHOTH, ImageIO.read(new File("./res/lance-pierre.png")), false, 0, 0);
 		listObjects.add(lancePierre);
 
-
 		levels[0] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/nature.jpg")), 1);
-		levels[1] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
+		
+		
+		//Liste de Pigs level 1
+		List<Pig> listPigs1 = new ArrayList<>();
+		Pig littlePig1 = new Pig(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL,  ImageIO.read(new File("./res/pig_1.png")), false, 1, 1, 0.0);
+		Pig MediumPig1 = new Pig(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL,  ImageIO.read(new File("./res/armor_pig.png")), false, 4, 3, 0.0);
+		listPigs1.add(littlePig1);
+		listPigs1.add(MediumPig1);
+		
+		//Liste d'oiseaux level 1
+		List<Bird> listBirds1 = new ArrayList<>(); 
+		Bird red1 = new Bird(new Point(initBirdX, initBirdY), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5), 0.1);
+		Bird chuck1 = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL, ImageIO.read(new File("./res/chuck.png")), true, 0, new Point(5, 5), 0.1);
+		Bird bomb1 = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), SIZE_IMAGE_LARGE, SIZE_IMAGE_HUGE, ImageIO.read(new File("./res/bomb.png")), true, 0, new Point(5, 5), 0.1);
+		Bird terence1 = new Bird(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30), SIZE_IMAGE_HUGE, SIZE_IMAGE_HUGE, ImageIO.read(new File("./res/terence.png")), true, 0, new Point(5, 5), 0.1);
 
-		this.levels=levels;
-		this.score = 0;
+		listBirds1.add(red1);
+		listBirds1.add(chuck1);
+		listBirds1.add(bomb1);
+		listBirds1.add(terence1);
+		
+		levels[1] = new Level(Difficulties.EASY, listBirds1, listPigs1, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
+
+		
 		gameOver = false;
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -108,7 +129,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			b.setPosition(new Point(mouseX-b.getWidth()/2, mouseY-b.getWidth()/2));
 			g.setColor(Color.RED);
 			g.drawLine( (int)initBirdX + b.getWidth()/2, 
-					(int)initBirdY + b.getWidth()/2, mouseX, mouseY);
+						(int)initBirdY + b.getWidth()/2, mouseX, mouseY);
 		}
 	}
 
@@ -151,7 +172,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 				b.updatePosition();				
 
 				List<Pig> pigs= levels[currentLevel].getListPigs();
-				System.out.println(currentBird);
 				for(int i = 0 ; i < pigs.size() ; i++){
 					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) < 35  ){
 
@@ -190,9 +210,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 				if(b.getPosition().getX()  < 0)
 					b.getVelocity().setX(b.getVelocity().getX()*-1);
 
-				if(pigs.isEmpty() )
+				if(pigs.isEmpty()){
 					stop();
-
+				}
+				
 			}
 			// redessine
 			repaint();
@@ -224,6 +245,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		if(gameOver) {
 			try {
 				init();
+				currentLevel++;
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

@@ -35,15 +35,12 @@ public class Pig extends AbstractObject {
 	public void changePigs(){
 		switch (life) {
 		case 1:
-			image = getToolkit().getImage("./res/pig_3.png");
+			image = getToolkit().getImage("./res/armor_pig3.png");
 			break;
 		case 2:
-			image = getToolkit().getImage("./res/pig_2.png");
+			image = getToolkit().getImage("./res/armor_pig2.png");
 			break;
 		case 3:
-			image = getToolkit().getImage("./res/pig_1.png");
-			break;
-		case 4:
 			image = getToolkit().getImage("./res/armor_pig.png");
 			break;
 		default:
