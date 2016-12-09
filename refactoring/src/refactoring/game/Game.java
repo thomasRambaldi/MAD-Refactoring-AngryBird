@@ -223,7 +223,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 				List<Pig> pigs= levels[currentLevel].getListPigs();
 
 				for(int i = 0 ; i < pigs.size() ; i++){
-					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) <  40){
+					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) <  b.getWidth() - 5 ){
 
 						pigIsHit(pigs, i);
 						nextBird();	
