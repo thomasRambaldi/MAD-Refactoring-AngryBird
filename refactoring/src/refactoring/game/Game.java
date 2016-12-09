@@ -3,6 +3,8 @@ package refactoring.game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -47,6 +49,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	private int windowWidth, windowHeight;
 
 	private double gravity;
+
+	private Image buffer;
 
 	public Game(int windowWidth, int windowHeight) throws IOException {
 		super();
@@ -156,8 +160,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		return (valueMin + ran.nextInt(valueMax - valueMin));
 	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void paint(Graphics g2) {
+		//super.paint(g);
+		if(buffer == null) buffer = createImage(1300, 800);
+		Graphics2D g = (Graphics2D) buffer.getGraphics();
 
 		drawLevel(g);
 		drawBirds(g);
@@ -174,6 +180,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			g.drawLine( (int)initBirdX + b.getWidth()/2, 
 					(int)initBirdY + b.getWidth()/2, mouseX, mouseY);
 		}
+		g2.drawImage(buffer, 0, 0, null);
 	}
 
 	public void drawObjectOfLevel(Graphics g) {
