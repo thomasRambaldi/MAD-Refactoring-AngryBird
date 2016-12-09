@@ -29,6 +29,7 @@ public class Main  {
 		Game game = new Game(w, h);
 		frame.setPreferredSize(new Dimension(w, h));
 		frame.add(game);
+		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
 	}
