@@ -15,7 +15,7 @@ public abstract class AbstractObject extends JComponent{
 	protected boolean isGravitational;
 	protected Graphics g;
 	protected int typeObject;
-	protected int width, heigth;
+	protected int width, height;
 	protected double gravity;
 
 
@@ -27,13 +27,13 @@ public abstract class AbstractObject extends JComponent{
 		gravity = 0.1;
 	}
 
-	public AbstractObject(Point position, int width , int heigth, Image image, boolean isGravitational, int typeObject, double gravity){
+	public AbstractObject(Point position, int width , int height, Image image, boolean isGravitational, int typeObject, double gravity){
 		this.position = position;
 		this.image = image;
 		this.isGravitational = isGravitational;
 		this.typeObject = typeObject;
 		this.width = width;
-		this.heigth = heigth;
+		this.height = height;
 		this.gravity = gravity;
 	}
 	//public abstract void paint ( Graphics g );
@@ -78,12 +78,12 @@ public abstract class AbstractObject extends JComponent{
 		this.width = width;
 	}
 
-	public int getHeigth() {
-		return heigth;
+	public int getHeight() {
+		return height;
 	}
 
-	public void setHeigth(int heigth) {
-		this.heigth = heigth;
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public double getGravity() {
