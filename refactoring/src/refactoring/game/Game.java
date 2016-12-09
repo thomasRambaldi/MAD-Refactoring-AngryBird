@@ -52,7 +52,25 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
 	private Image buffer;
 
-	public Game(int windowWidth, int windowHeight) throws IOException {
+
+	/** Instance unique non préinitialisée */
+	private static Game INSTANCE = null;
+
+	/** Point d'accès pour l'instance unique du singleton */
+	public static Game getInstance( int windowWidth, int windowHeight )
+	{			
+		if (INSTANCE == null)
+		{ 	
+			try {
+				INSTANCE = new Game(windowWidth, windowHeight);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
+		return INSTANCE;
+	}
+
+	private Game(int windowWidth, int windowHeight) throws IOException {
 		super();
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
@@ -73,11 +91,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		initBirdX = (int) (windowWidth/6 - 30) ;
 		initBirdY = (int) (windowHeight/1.3 - 70) ;
 		gameOver = false;
-		
+
 		List<ObjectOfLevel> listObjects = new ArrayList<>();
 		ObjectOfLevel lancePierre = new ObjectOfLevel(new Point(windowWidth/6, windowHeight/1.3), SLINGSHOTW, SLINGSHOTH, ImageIO.read(new File("./res/lance-pierre.png")), false, 0, 0);
 		listObjects.add(lancePierre);
-		
+
 		/*-----------------------*/
 		//--------Level 0---------/
 		/*-----------------------*/
@@ -94,7 +112,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		levels[1] = new Level(Difficulties.EASY, listBirds1, listPigs1, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
 	}
 
-/*
+	/*
 	private void initForNextLevel() throws IOException {
 
 		if(currentLevel==0){
@@ -117,8 +135,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		initBirdY = (int) (windowHeight/1.3 - 70) ;
 		gameOver = false;
 	}
-*/
-	
+	 */
+
 	public List<Bird> addBirdsInLevel0() throws IOException {
 		List<Bird> listBirds = new ArrayList<>(); 
 		Bird red = new Bird(new Point(initBirdX, initBirdY), SIZE_IMAGE_NORMAL, SIZE_IMAGE_NORMAL, ImageIO.read(new File("./res/red.png")), true, 0, new Point(5, 5), 0.1);
@@ -169,10 +187,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		drawBirds(g);
 		drawPigs(g);
 		drawObjectOfLevel(g);
-		
+
 		g.setFont(new Font("TimesNewRoman", Font.BOLD , 30));
 		g.drawString("score : " + score, windowWidth - 200, 30);
-		
+
 		Bird b = levels[currentLevel].getListBirds().get(currentBird);
 		if(selecting){
 			b.setPosition(new Point(mouseX-b.getWidth()/2, mouseY-b.getWidth()/2));
@@ -216,7 +234,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			// un pas de simulation toutes les 10ms
 			try { Thread.currentThread().sleep(10); } catch(InterruptedException e) { }
 
-			
+
 			if(!selecting && !gameOver) {
 				Bird b = levels[currentLevel].getListBirds().get(currentBird);
 				b.updatePosition();				
@@ -325,9 +343,9 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			double y = (((int)initBirdY + b.getWidth()/2) - mouseY   )/20;
 			double distance = Point.distance(init, mouse)/150;
 			Point velocity = new Point(x * distance , y * distance);
-					
-//					new Point((int) ((initBirdX - mouseX) / 20.0)/**Point.distance(init, mouse)/200*/, 
-//					(int) ((initBirdY - mouseY) / 20.0)/**Point.distance(init, mouse)/100*/);
+
+			//					new Point((int) ((initBirdX - mouseX) / 20.0)/**Point.distance(init, mouse)/200*/, 
+			//					(int) ((initBirdY - mouseY) / 20.0)/**Point.distance(init, mouse)/100*/);
 			gravity=b.getGravity();
 			b.setGravity(0.0001);
 			b.setVelocity(velocity);
