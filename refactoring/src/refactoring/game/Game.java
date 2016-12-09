@@ -255,15 +255,13 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 					b.getVelocity().setY(b.getVelocity().getY()*-0.8);
 				}
 
-				if(b.getPosition().getY() < 0  ){
-					b.getVelocity().setY(b.getVelocity().getY()*-1);
+				if(b.getPosition().getY() < 0  && b.getVelocity().getY() < -0.001){
+					b.getVelocity().setY(b.getVelocity().getY()*-0.9);
 				}
 
-				if(b.getPosition().getX() + b.getWidth() > windowWidth)
-					b.getVelocity().setX(b.getVelocity().getX()*-1);
-
-				if(b.getPosition().getX()  < 0)
-					b.getVelocity().setX(b.getVelocity().getX()*-1);
+				if((b.getPosition().getX() + b.getWidth() > windowWidth && b.getVelocity().getX() > 0.001)
+						|| b.getPosition().getX() < 0 && b.getVelocity().getX() < -0.001)
+					b.getVelocity().setX(b.getVelocity().getX()*-0.9);
 
 				if(pigs.isEmpty()){
 					stop();
