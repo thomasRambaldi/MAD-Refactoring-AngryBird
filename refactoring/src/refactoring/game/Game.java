@@ -317,6 +317,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
 				if(pigs.isEmpty()){
 					clipWin.setFramePosition(0);
+					clipWin.setMicrosecondPosition(400000);
 					clipWin.start();
 					stop();
 				}
