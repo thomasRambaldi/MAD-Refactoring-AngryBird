@@ -18,14 +18,6 @@ public class ObjectOfLevel extends AbstractObject{
 
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
-		switch (typeObject) {
-		case 1:
-			image = getToolkit().getImage("./res/lance-pierre.png");
-			break;
-		default:
-			break;
-		}
 		g.drawImage(image, (int) getPosition().getX() - width/2, (int)getPosition().getY()-heigth/2, width, heigth, this);
 	}
 }
