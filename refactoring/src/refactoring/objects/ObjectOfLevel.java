@@ -18,6 +18,6 @@ public class ObjectOfLevel extends AbstractObject{
 
 	@Override
 	public void paint(Graphics g) {
-		g.drawImage(image, (int) getPosition().getX() - width/2, (int)getPosition().getY()-heigth/2, width, heigth, this);
+		g.drawImage(image, (int) getPosition().getX() - width/2, (int)getPosition().getY()-height/2, width, height, this);
 	}
 }

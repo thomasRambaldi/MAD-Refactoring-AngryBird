@@ -30,7 +30,7 @@ public class Bird extends AbstractObject {
 
 	@Override
 	public void paint(Graphics g) {
-		g.drawImage(image, (int) getPosition().getX(), (int)getPosition().getY(),  width, heigth, this);
+		g.drawImage(image, (int) getPosition().getX(), (int)getPosition().getY(),  width, height, this);
 	}
 	
 	public void updatePosition(){
@@ -38,4 +38,6 @@ public class Bird extends AbstractObject {
 		position.setY(position.getY() + velocity.getY());
 		velocity.setY(velocity.getY() + gravity);
 	}
+
+	
 }
