@@ -47,6 +47,10 @@ public class ObjectFactory {
 		if(objectName.equalsIgnoreCase("Slingshot")){
 			return setObjectOfLevel("lance-pierre.png", 60, 150);
 		}
+		
+		if(objectName.equalsIgnoreCase("Pipe")){
+			return setObjectOfLevel("tuyau.png", 50, 80);
+		}
 		return null;
 	}
 	

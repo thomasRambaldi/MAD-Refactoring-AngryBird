@@ -36,12 +36,6 @@ import refactoring.point.Point;
 public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
 
-	private final int SIZE_IMAGE_NORMAL = 40;
-	private final int SIZE_IMAGE_LARGE = 50;
-	private final int SIZE_IMAGE_HUGE = 60;
-	private final int SLINGSHOTW = 60;
-	private final int SLINGSHOTH = 150;
-
 	private Level[] levels;
 	private int currentLevel;
 	private int currentBird;
@@ -97,10 +91,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		try {
 			clipWin.open(audioInputStream);
 		} catch (LineUnavailableException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
@@ -110,7 +102,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		this.score = 0;
-		currentLevel = 0;
+		currentLevel = 1;
 		Level[] levels = new Level[2];
 		this.levels=levels;
 		objectFactory = new ObjectFactory();
@@ -129,14 +121,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		initBirdY = (int) (windowHeight/1.3 - 70) ;
 		gameOver = false;
 
-		List<ObjectOfLevel> listObjects = new ArrayList<>();
-		ObjectOfLevel lancePierre = (ObjectOfLevel) objectFactory.createObject("Slingshot");
-		lancePierre.setPosition(new Point(windowWidth/6, windowHeight/1.3));
-		listObjects.add(lancePierre);
 
 		/*-----------------------*/
 		//--------Level 0---------/
 		/*-----------------------*/
+		List<ObjectOfLevel> listObjects = new ArrayList<>();
+		ObjectOfLevel lancePierre = (ObjectOfLevel) objectFactory.createObject("Slingshot");
+		lancePierre.setPosition(new Point(windowWidth/6, windowHeight/1.3));
+		listObjects.add(lancePierre);
+		
 		List<Bird> listBirds = addBirdsInLevel0();
 		List<Pig> listPigs = addPigsInLevel0();
 		levels[0] = new Level(Difficulties.EASY, listBirds, listPigs, listObjects, ImageIO.read(new File("./res/nature.jpg")), 1);
@@ -145,35 +138,17 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		/*-----------------------*/
 		//--------Level 1---------/
 		/*-----------------------*/
+		List<ObjectOfLevel> listObjects1 = new ArrayList<>();
+		ObjectOfLevel pipe = (ObjectOfLevel) objectFactory.createObject("Pipe");
+		pipe.setPosition(new Point(windowWidth/3, windowHeight/1.22));
+		listObjects1.add(pipe);
+		listObjects1.add(lancePierre);
+		
 		List<Bird> listBirds1 = addBirdsInLevel1();
 		List<Pig> listPigs1 = addPigsInLevel1();
-		levels[1] = new Level(Difficulties.EASY, listBirds1, listPigs1, listObjects, ImageIO.read(new File("./res/marais.jpg")), 1);
+		levels[1] = new Level(Difficulties.EASY, listBirds1, listPigs1, listObjects1, ImageIO.read(new File("./res/marais.jpg")), 1);
 	}
 
-	/*
-	private void initForNextLevel() throws IOException {
-
-		if(currentLevel==0){
-			List<Bird> listBirds = addBirdsInLevel0();
-			List<Pig> listPigs = addPigsInLevel0();
-			levels[0].setListBirds(listBirds);
-			levels[0].setListPigs(listPigs);
-		}
-		if(currentLevel==1){
-			List<Pig> listPigs1 = addPigsInLevel1();
-			List<Bird> listBirds1 = addBirdsInLevel1();
-			levels[1].setListBirds(listBirds1);
-			levels[1].setListPigs(listPigs1);
-		}
-
-		currentBird = 0;
-		currentPig = 0;
-		selecting = true;
-		initBirdX = (int) (windowWidth/6 - 30) ;
-		initBirdY = (int) (windowHeight/1.3 - 70) ;
-		gameOver = false;
-	}
-	 */
 
 	public List<Bird> addBirdsInLevel0() throws IOException {
 		List<Bird> listBirds = new ArrayList<>(); 
@@ -197,20 +172,25 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		
 		Bird red1 = (Bird) objectFactory.createObject("Little Red Bird");
 		red1.setPosition(new Point(initBirdX, initBirdY));
+
 		
 		Bird chuck1 = (Bird) objectFactory.createObject("Yellow Bird");
 		chuck1.setPosition(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30));
 		
 		Bird bomb1 = (Bird) objectFactory.createObject("Bomb Bird");
-		bomb1.setPosition(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30));
+		bomb1.setPosition(new Point(windowWidth/6 - 110, windowHeight/1.3 + 30));
 		
 		Bird terence1 = (Bird) objectFactory.createObject("Terence Bird");
-		terence1.setPosition(new Point(windowWidth/6 - 50, windowHeight/1.3 + 30));
+		terence1.setPosition(new Point(windowWidth/6 - 180, windowHeight/1.3 + 30));
+		
+		Bird red11 = (Bird) objectFactory.createObject("Little Red Bird");
+		red11.setPosition(new Point(windowWidth/6 - 220, windowHeight/1.3 + 30));
 		
 		listBirds1.add(red1);
 		listBirds1.add(chuck1);
 		listBirds1.add(bomb1);
 		listBirds1.add(terence1);
+		listBirds1.add(red11);
 		return listBirds1;
 	}
 
@@ -254,7 +234,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	}
 
 	public void drawObjectOfLevel(Graphics g) {
-		List<ObjectOfLevel> objectsOfLevel = levels[0].getListObjects();
+		List<ObjectOfLevel> objectsOfLevel = levels[currentLevel].getListObjects();
 		for(ObjectOfLevel object : objectsOfLevel)
 			object.paint(g);
 	}
@@ -286,15 +266,17 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			// un pas de simulation toutes les 10ms
 			try { Thread.currentThread().sleep(10); } catch(InterruptedException e) { }
 
-
 			if(!selecting && !gameOver) {
 				Bird b = levels[currentLevel].getListBirds().get(currentBird);
 				b.updatePosition();				
 				List<Pig> pigs= levels[currentLevel].getListPigs();
-
+				List<ObjectOfLevel> objects = levels[currentLevel].getListObjects();
+				
 				for(int i = 0 ; i < pigs.size() ; i++){
+					if(Point.distance(objects.get(i).getPosition(), b.getPosition()) < 50 ){
+						stop();
+					}
 					if(Point.distance(b.getPosition(), pigs.get(i).getPosition()) <  b.getWidth() - 5 ){
-
 						pigIsHit(pigs, i);
 						nextBird();	
 					}
