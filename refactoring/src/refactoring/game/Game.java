@@ -216,11 +216,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
 	public List<Pig> addPigsInLevel1() throws IOException {
 		List<Pig> listPigs1 = new ArrayList<>();
-		Pig littlePig1 = (Pig) objectFactory.createObject("Armor Pig");
-		littlePig1.setPosition(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150));
+		Pig armorPig = (Pig) objectFactory.createObject("Armor Pig");
+		armorPig.setPosition(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150));
 		Pig MediumPig1 = (Pig) objectFactory.createObject("King Pig");
 		MediumPig1.setPosition(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 150));
-		listPigs1.add(littlePig1);
+		listPigs1.add(armorPig);
 		listPigs1.add(MediumPig1);
 		return listPigs1;
 	}
