@@ -49,7 +49,6 @@ public class Level extends Panel{
 	public void paint(Graphics g) {
 		//super.paint(g);
 		g.drawImage(background, 0, 0, 1300, 800, this);
-		
 	}
 	
 	public Difficulties getDifficulty() {
