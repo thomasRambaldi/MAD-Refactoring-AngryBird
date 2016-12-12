@@ -49,6 +49,12 @@ public class Level extends Panel{
 	public void paint(Graphics g) {
 		//super.paint(g);
 		g.drawImage(background, 0, 0, 1300, 800, this);
+		for(Bird b : listBirds)
+			b.paint(g);
+		for(Pig p : listPigs)
+			p.paint(g);
+		for(ObjectOfLevel object : listObjects)
+			object.paint(g);
 	}
 	
 	public Difficulties getDifficulty() {
