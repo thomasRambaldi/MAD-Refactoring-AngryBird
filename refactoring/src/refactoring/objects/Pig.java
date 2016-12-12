@@ -2,6 +2,7 @@ package refactoring.objects;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
 
 import refactoring.point.Point;
 
@@ -57,6 +58,12 @@ public class Pig extends AbstractObject {
 
 	@Override
 	public void paint(Graphics g) {
-		g.drawImage(image, (int) getPosition().getX(), (int)getPosition().getY(),  width, height, this);
+		g.drawImage(image, (int) getPosition().getX()-width/2, (int)getPosition().getY()-height/2,  width, height, this);
+	}
+
+	@Override
+	public void actionCollision() {
+		looseLife();
+		changePigs();
 	}
 }

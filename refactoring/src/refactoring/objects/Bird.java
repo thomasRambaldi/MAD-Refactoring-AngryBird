@@ -2,6 +2,7 @@ package refactoring.objects;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
 
 import refactoring.point.Point;
 
@@ -31,14 +32,14 @@ public class Bird extends AbstractObject {
 
 	@Override
 	public void paint(Graphics g) {
-		g.drawImage(image, (int) getPosition().getX(), (int)getPosition().getY(),  width, height, this);
+		g.drawImage(image, (int) getPosition().getX()-width/2, (int)getPosition().getY()-height/2,  width, height, this);
 	}
 	
 	public void updatePosition(int windowWidth, int windowHeight){
 		if( stop)
 			return;
 		
-		if(velocity.getY() > 0 && velocity.getY() < 1 && position.getY()+2 >  windowHeight - 150) {
+		if(velocity.getY() > 0 && velocity.getY() < 1 && position.getY()+2 >  windowHeight) {
 			velocity.setY(0);
 			velocity.setX(0);
 			stop = true;
@@ -46,10 +47,10 @@ public class Bird extends AbstractObject {
 		}
 		
 		if( isHitingFloor(windowHeight) )
-			velocity.setY(velocity.getY()*-0.8);
+			velocity.setY(velocity.getY()*-0.5);
 
-		if(isHitingCeiling())
-			velocity.setY(velocity.getY()*-0.9);
+//		if(isHitingCeiling())
+//			velocity.setY(velocity.getY()*-0.9);
 		
 		if(isHitingRightWall(windowWidth) || isHitingLeftWall())
 			velocity.setX(velocity.getX()*-0.9);
@@ -57,6 +58,7 @@ public class Bird extends AbstractObject {
 		position.setX(position.getX() + velocity.getX());
 		position.setY(position.getY() + velocity.getY());
 		velocity.setY(velocity.getY() + gravity);
+		velocity.setX(velocity.getX()/1.002);
 	}
 
 	private boolean isHitingCeiling(){
@@ -64,7 +66,7 @@ public class Bird extends AbstractObject {
 	}
 	
 	private boolean isHitingFloor(int windowHeight){
-		return position.getY() >  windowHeight - 150 && (velocity.getY() > 0.001);
+		return position.getY() >  windowHeight && (velocity.getY() > 0.001);
 	}
 	
 	private boolean isHitingLeftWall(){
@@ -74,12 +76,22 @@ public class Bird extends AbstractObject {
 	private boolean isHitingRightWall(int windowWidth){
 		return position.getX() + getWidth() > windowWidth && velocity.getX() > 0.001;
 	}
+	
+	public boolean isStop(){
+		return stop;
+	}
 
 	public void acceleratePosition(double acceleration) {
 		velocity.setX(velocity.getX()*acceleration);
 		velocity.setY(velocity.getY()*acceleration);
 		position.setX(position.getX() + velocity.getX());
 		position.setY(position.getY() + velocity.getY());
+	}
+
+	@Override
+	public void actionCollision() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -2,6 +2,7 @@ package refactoring.objects;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -93,5 +94,19 @@ public abstract class AbstractObject extends JComponent{
 	public void setGravity(double gravity) {
 		this.gravity = gravity;
 	}
+	
+	
+	public boolean isCollided(AbstractObject o/*Point center, int width, int height*/){
+		double highY = position.getY()-height/2;
+		double bottomY = position.getY() + height/2;
+		double leftX = position.getX()-width/2;
+		double rightX = position.getX() + width/2;
+		return o.getPosition().getY() + o.getHeight()/2 > highY && 
+			   o.getPosition().getY() - o.getHeight()/2 < bottomY && 
+			   o.getPosition().getX() + o.getWidth()/2 > leftX && 
+			   o.getPosition().getX()  < rightX;
+	}
+	
+	public abstract void actionCollision();
 
 }
