@@ -24,7 +24,21 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeType;
+
+import jdk.nashorn.internal.runtime.regexp.JoniRegExp.Factory;
+import refactoring.files.ReaderLevels;
 import refactoring.level.Difficulties;
 import refactoring.level.Level;
 import refactoring.objects.AbstractObject;
@@ -60,6 +74,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	private ObjectFactory objectFactory;
 
 	private Clip clipWin=null;
+	
+	private ReaderLevels reader;
 
 	private boolean isOnSlingshot;
 
@@ -114,7 +130,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		currentLevel = -1;
 		objectFactory = new ObjectFactory();
 		FLOOR = windowHeight - 140;
-		ArrayList<Level> levels = readLevels();
+		reader = new ReaderLevels(objectFactory, windowWidth, windowHeight, FLOOR);
+		ArrayList<Level> levels = reader.readLevelsXML();
 		this.levels=levels;
 
 
@@ -125,93 +142,9 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		new Thread(this).start();
 	}
 
-	private ArrayList<Level> readLevels() {
-		ArrayList<Level> levels = new ArrayList<Level>();
-		String background = null;
-		try(BufferedReader br = new BufferedReader(new FileReader("res/levels"))) {
-			for(String line = br.readLine() ; line != null ; line=br.readLine()){
-				if(line.isEmpty()) continue;
-				String [] data = line.split(" ");
+	
 
-				if(data.length==1){
-					background=line;
-					continue;
-				}
-
-				Level level = new Level();
-				level.setBackground(ImageIO.read(new File("./res/"+background)));
-				ArrayList<Bird> listBirds = new ArrayList<Bird>();
-				ArrayList<Pig> listPigs = new ArrayList<Pig>();
-				ArrayList<ObjectOfLevel> listObjects = new ArrayList<ObjectOfLevel>();
-
-				ObjectOfLevel lancePierre = (ObjectOfLevel) objectFactory.createObject("Slingshot");
-				lancePierre.setPosition(new Point(windowWidth/6, windowHeight/1.3));
-				listObjects.add(lancePierre);
-
-				for(int i = 0; i < data.length ; i++){
-					int typeObject = Integer.parseInt(data[i]);
-					switch(typeObject){
-					case 0 : listBirds.add(getBirdByType(Integer.parseInt(data[i+1]))); i = i + 1 ; break;
-					case 1 : listPigs.add(getPigByType(Integer.parseInt(data[i+1]))); i = i + 1 ; break;
-					case 2 : ObjectOfLevel o = getObjectOfLevelByType(Integer.parseInt(data[i+1]));
-					o.setPosition(new Point(windowWidth/Double.parseDouble(data[i+2]), windowHeight/Double.parseDouble(data[i+3]))); 
-					listObjects.add(o); i = i + 3; break;
-					}	
-				}
-				setBirdsPosition(listBirds);
-				setPigPosition(listPigs);
-				level.setListBirds(listBirds);
-				level.setListPigs(listPigs);
-				level.setListObjects(listObjects);
-				levels.add(level);
-			}
-		} catch (FileNotFoundException e) {	e.printStackTrace();
-		} catch (IOException e) { e.printStackTrace(); }
-		return levels;
-	}
-
-	private void setPigPosition(ArrayList<Pig> pigs) {
-		for(Pig pig : pigs)
-			pig.setPosition(new Point( generatePigPosition(300, windowWidth-100), windowHeight - 140));
-	}
-
-	private void setBirdsPosition(ArrayList<Bird> birds) {
-		int  afterLancePierre = windowWidth/6; 
-		int pas = 180/birds.size();
-		for(int i = 1; i < birds.size() ; i++)
-			birds.get(i).setPosition(new Point(afterLancePierre - pas*i, FLOOR));
-
-	}
-
-	private Bird getBirdByType(int type) {
-		if(type == 0)
-			return (Bird) objectFactory.createObject("Little Red Bird");
-		if(type == 1)
-			return (Bird) objectFactory.createObject("Yellow Bird");
-		if(type == 2)
-			return (Bird) objectFactory.createObject("Bomb Bird");
-		if(type == 3)
-			return (Bird) objectFactory.createObject("Terence Bird");
-		return (Bird) objectFactory.createObject("Little Red Bird");
-	}
-
-	private Pig getPigByType(int type) {
-		if(type == 0)
-			return (Pig) objectFactory.createObject("Normal Pig");
-		if(type == 1)
-			return (Pig) objectFactory.createObject("Armor Pig");
-		if(type == 2)
-			return (Pig) objectFactory.createObject("King Pig");
-		return (Pig) objectFactory.createObject("Normal Pig");
-	}
-
-	private ObjectOfLevel getObjectOfLevelByType(int type) {
-		if(type == 0)
-			return (ObjectOfLevel) objectFactory.createObject("Slingshot");
-		if(type == 1)
-			return (ObjectOfLevel) objectFactory.createObject("Pipe");
-		return (ObjectOfLevel) objectFactory.createObject("Pipe");
-	}
+	
 
 	public void init(){
 		currentBird = 0;
@@ -225,7 +158,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		if(currentLevel+1 == levels.size()){
 			currentLevel = 0;
 			score = 0;
-			levels=readLevels();
+			levels=reader.readLevelsXML();
 		}
 		else
 			currentLevel++;
@@ -235,10 +168,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		mouseY = initBirdY;
 	}
 
-	public int generatePigPosition( int valueMin, int valueMax ){
-		Random ran = new Random();
-		return (valueMin + ran.nextInt(valueMax - valueMin));
-	}
+	
 
 	public void paint(Graphics g2) {
 		if(buffer == null) buffer = createImage(1300, 800);
@@ -439,7 +369,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			case 2 : break;
 			default : break;
 			}
-			
+
 		}
 
 	}
